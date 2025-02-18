@@ -20,7 +20,7 @@ const PluginName = "driver"
 
 // PluginMap is the map of plugins we can dispense.
 var PluginMap = map[string]plugin.Plugin{
-	"driver_grpc": &DriverGRPCPlugin{},
+	PluginName: &DriverGRPCPlugin{},
 }
 
 type Response struct {
