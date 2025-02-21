@@ -44,15 +44,11 @@ func (s *gRPCServer) SetConfig(_ context.Context, req *proto.RequestArgs) (*prot
 	return &proto.ResponseResult{Data: res.Data}, nil
 }
 func (s *gRPCServer) Setup(ctx context.Context, req *proto.RequestArgs) (*proto.ResponseResult, error) {
-	s.log.Error("PluginId", req.PluginId)
-	//conn, err := grpc.DialContext(ctx, fmt.Sprintf("0.0.0.0:%d", req.PluginId),
-	//	grpc.WithTransportCredentials(insecure.NewCredentials()))
 	conn, err := grpc.NewClient(
 		fmt.Sprintf("0.0.0.0:%d", req.PluginId),
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 	)
 	if err != nil {
-		s.log.Error("grpc dial context error", err)
 		return &proto.ResponseResult{}, err
 	}
 	report := &gRPCReportClient{client: proto.NewReportClient(conn)}

@@ -7,8 +7,8 @@ import (
 	"sync"
 )
 
-var PluginFactories = make(map[string]*Client)
-var PluginLock sync.Mutex
+var Factories = make(map[string]*Client)
+var Lock sync.Mutex
 
 type Client struct {
 	pluginClient *plugin.Client
@@ -172,33 +172,33 @@ type DriverConfig struct {
 }
 
 func RegisterPlugin(driver DriverConfig) (*Client, error) {
-	PluginLock.Lock()
-	defer PluginLock.Unlock()
-	if c, ok := PluginFactories[driver.Name]; ok {
+	Lock.Lock()
+	defer Lock.Unlock()
+	if c, ok := Factories[driver.Name]; ok {
 		return c, nil
 	}
 	c, err := NewClient(driver.Name, driver.Path)
 	if err != nil {
 		return nil, err
 	}
-	PluginFactories[driver.Name] = c
+	Factories[driver.Name] = c
 
 	return c, nil
 }
 
 func GetPlugin(name string) (*Client, error) {
-	PluginLock.Lock()
-	defer PluginLock.Unlock()
-	if c, ok := PluginFactories[name]; ok {
+	Lock.Lock()
+	defer Lock.Unlock()
+	if c, ok := Factories[name]; ok {
 		return c, nil
 	}
 	return nil, errors.New("plugin not found")
 }
 
 func ClosePlugin(name string) error {
-	PluginLock.Lock()
-	defer PluginLock.Unlock()
-	if c, ok := PluginFactories[name]; ok {
+	Lock.Lock()
+	defer Lock.Unlock()
+	if c, ok := Factories[name]; ok {
 		return c.Disable()
 	}
 	return errors.New("plugin not found")
