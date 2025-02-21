@@ -53,7 +53,6 @@ func Serve(opts *ServeOpts) error {
 		1: {
 			PluginName: &DriverGRPCPlugin{
 				Factory: opts.FactoryFunc,
-				Log:     logger,
 			},
 		},
 	}
