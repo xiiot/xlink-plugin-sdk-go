@@ -2,7 +2,7 @@ package plugin
 
 import (
 	"context"
-	log "github.com/hashicorp/go-hclog"
+	"github.com/hashicorp/go-hclog"
 	"github.com/hashicorp/go-plugin"
 	"github.com/zeelink-tech/xlink-plugin-sdk-go/proto"
 	"google.golang.org/grpc"
@@ -14,7 +14,6 @@ var _ Driver = &gRPCClient{}
 type gRPCClient struct {
 	client proto.DriverClient
 	broker *plugin.GRPCBroker
-	logger log.Logger
 }
 
 func (c *gRPCClient) GetDriverInfo(req *Request) (*Response, error) {
@@ -58,7 +57,8 @@ func (c *gRPCClient) Setup(config *BackendConfig) (*Response, error) {
 	go func() {
 		er := grpcServer.Serve(lis)
 		if er != nil {
-			c.logger.Error("failed to start grpc report server", er)
+			logger := hclog.New(&hclog.LoggerOptions{})
+			logger.Error("failed to start grpc report server", er)
 		}
 	}()
 

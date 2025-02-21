@@ -60,7 +60,6 @@ func Serve(opts *ServeOpts) error {
 	serveOpts := &plugin.ServeConfig{
 		HandshakeConfig:  Handshake,
 		VersionedPlugins: pluginSets,
-		Logger:           logger,
 		GRPCServer: func(opts []grpc.ServerOption) *grpc.Server {
 			opts = append(opts, grpc.MaxRecvMsgSize(math.MaxInt32))
 			opts = append(opts, grpc.MaxSendMsgSize(math.MaxInt32))

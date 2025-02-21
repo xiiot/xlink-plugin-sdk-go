@@ -3,7 +3,6 @@ package plugin
 import (
 	"context"
 	"fmt"
-	log "github.com/hashicorp/go-hclog"
 	"github.com/hashicorp/go-plugin"
 	"github.com/zeelink-tech/xlink-plugin-sdk-go/proto"
 	"google.golang.org/grpc"
@@ -16,7 +15,6 @@ type gRPCServer struct {
 	factory Factory
 	driver  Driver
 
-	log    log.Logger
 	broker *plugin.GRPCBroker
 }
 
@@ -56,7 +54,6 @@ func (s *gRPCServer) Setup(ctx context.Context, req *proto.RequestArgs) (*proto.
 	config := &BackendConfig{
 		ReportSvc:  report,
 		DriverName: req.Request,
-		Log:        s.log,
 	}
 	driver, err := s.factory(ctx, config)
 	if err != nil {
