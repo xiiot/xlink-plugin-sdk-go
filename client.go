@@ -29,7 +29,7 @@ func NewClient(name, path string, logger hclog.Logger) (*Client, error) {
 	c.enable = true
 	c.path = path
 	c.name = name
-	c.logger = logger.With("plugin", "SDK")
+	c.logger = logger.With("plugin", name)
 
 	err := c.Check()
 	if err != nil {
@@ -52,7 +52,7 @@ func (c *Client) Check() error {
 	}
 	c.on = false
 
-	var args []string
+	args := []string{}
 	plugClient := plugin.NewClient(&plugin.ClientConfig{
 		HandshakeConfig: Handshake,
 		Plugins:         PluginMap,

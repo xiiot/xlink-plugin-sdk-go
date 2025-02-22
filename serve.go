@@ -43,12 +43,12 @@ func Serve(opts *ServeOpts) error {
 
 	logger := opts.Logger
 	if logger == nil {
-		logger.Error("11111111111111111")
-		//logger = hclog.New(&hclog.LoggerOptions{
-		//	Level:      hclog.Debug,
-		//	Output:     os.Stderr,
-		//	JSONFormat: true,
-		//})
+		logger = hclog.New(&hclog.LoggerOptions{
+			Level:           hclog.Debug,
+			Output:          hclog.DefaultOutput,
+			JSONFormat:      true,
+			IncludeLocation: false,
+		})
 	}
 
 	pluginSets := map[int]plugin.PluginSet{
