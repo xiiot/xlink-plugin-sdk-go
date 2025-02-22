@@ -14,6 +14,7 @@ var _ Driver = &gRPCClient{}
 type gRPCClient struct {
 	client proto.DriverClient
 	broker *plugin.GRPCBroker
+	logger hclog.Logger
 }
 
 func (c *gRPCClient) GetDriverInfo(req *Request) (*Response, error) {
@@ -57,8 +58,7 @@ func (c *gRPCClient) Setup(config *BackendConfig) (*Response, error) {
 	go func() {
 		er := grpcServer.Serve(lis)
 		if er != nil {
-			logger := hclog.New(&hclog.LoggerOptions{})
-			logger.Error("failed to start grpc report server", er)
+			c.logger.Error("failed to start grpc report server", er)
 		}
 	}()
 

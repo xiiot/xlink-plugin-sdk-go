@@ -2,7 +2,7 @@ package plugin
 
 import (
 	"fmt"
-	log "github.com/hashicorp/go-hclog"
+	"github.com/hashicorp/go-hclog"
 	"github.com/hashicorp/go-plugin"
 	"google.golang.org/grpc"
 	"math"
@@ -18,7 +18,7 @@ func init() {
 
 type ServeOpts struct {
 	FactoryFunc Factory
-	Logger      log.Logger
+	Logger      hclog.Logger
 }
 
 func checkParentAlive() {
@@ -40,25 +40,29 @@ func checkParentAlive() {
 
 func Serve(opts *ServeOpts) error {
 	checkParentAlive()
+
 	logger := opts.Logger
 	if logger == nil {
-		logger = log.New(&log.LoggerOptions{
-			Level:      log.Debug,
-			Output:     os.Stderr,
-			JSONFormat: true,
-		})
+		logger.Error("11111111111111111")
+		//logger = hclog.New(&hclog.LoggerOptions{
+		//	Level:      hclog.Debug,
+		//	Output:     os.Stderr,
+		//	JSONFormat: true,
+		//})
 	}
 
 	pluginSets := map[int]plugin.PluginSet{
 		1: {
 			PluginName: &DriverGRPCPlugin{
 				Factory: opts.FactoryFunc,
+				Logger:  logger,
 			},
 		},
 	}
 	serveOpts := &plugin.ServeConfig{
 		HandshakeConfig:  Handshake,
 		VersionedPlugins: pluginSets,
+		Logger:           logger,
 		GRPCServer: func(opts []grpc.ServerOption) *grpc.Server {
 			opts = append(opts, grpc.MaxRecvMsgSize(math.MaxInt32))
 			opts = append(opts, grpc.MaxSendMsgSize(math.MaxInt32))

@@ -2,6 +2,7 @@ package plugin
 
 import (
 	"errors"
+	"github.com/hashicorp/go-hclog"
 	"github.com/hashicorp/go-plugin"
 	"os/exec"
 	"sync"
@@ -18,14 +19,17 @@ type Client struct {
 	enable       bool
 	on           bool
 
+	logger hclog.Logger
+
 	sync.Mutex
 }
 
-func NewClient(name, path string) (*Client, error) {
+func NewClient(name, path string, logger hclog.Logger) (*Client, error) {
 	c := new(Client)
 	c.enable = true
 	c.path = path
 	c.name = name
+	c.logger = logger.With("plugin", "SDK")
 
 	err := c.Check()
 	if err != nil {
@@ -48,10 +52,12 @@ func (c *Client) Check() error {
 	}
 	c.on = false
 
+	var args []string
 	plugClient := plugin.NewClient(&plugin.ClientConfig{
 		HandshakeConfig: Handshake,
 		Plugins:         PluginMap,
-		Cmd:             exec.Command("sh", "-c", c.path),
+		Logger:          c.logger,
+		Cmd:             exec.Command(c.path, args...),
 		AllowedProtocols: []plugin.Protocol{
 			plugin.ProtocolGRPC},
 	})
@@ -167,8 +173,9 @@ func (c *Client) Status() (enable, on bool) {
 }
 
 type DriverConfig struct {
-	Name string
-	Path string
+	Name   string
+	Path   string
+	Logger hclog.Logger
 }
 
 func RegisterPlugin(driver DriverConfig) (*Client, error) {
@@ -177,7 +184,7 @@ func RegisterPlugin(driver DriverConfig) (*Client, error) {
 	if c, ok := Factories[driver.Name]; ok {
 		return c, nil
 	}
-	c, err := NewClient(driver.Name, driver.Path)
+	c, err := NewClient(driver.Name, driver.Path, driver.Logger)
 	if err != nil {
 		return nil, err
 	}

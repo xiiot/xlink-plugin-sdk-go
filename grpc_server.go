@@ -3,6 +3,7 @@ package plugin
 import (
 	"context"
 	"fmt"
+	"github.com/hashicorp/go-hclog"
 	"github.com/hashicorp/go-plugin"
 	"github.com/zeelink-tech/xlink-plugin-sdk-go/proto"
 	"google.golang.org/grpc"
@@ -15,6 +16,7 @@ type gRPCServer struct {
 	factory Factory
 	driver  Driver
 
+	logger hclog.Logger
 	broker *plugin.GRPCBroker
 }
 
@@ -47,6 +49,7 @@ func (s *gRPCServer) Setup(ctx context.Context, req *proto.RequestArgs) (*proto.
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 	)
 	if err != nil {
+		s.logger.Error("grpc dial context error", err)
 		return &proto.ResponseResult{}, err
 	}
 	report := &gRPCReportClient{client: proto.NewReportClient(conn)}
@@ -54,6 +57,7 @@ func (s *gRPCServer) Setup(ctx context.Context, req *proto.RequestArgs) (*proto.
 	config := &BackendConfig{
 		ReportSvc:  report,
 		DriverName: req.Request,
+		Logger:     s.logger,
 	}
 	driver, err := s.factory(ctx, config)
 	if err != nil {

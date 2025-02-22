@@ -2,6 +2,7 @@ package plugin
 
 import (
 	"context"
+	"github.com/hashicorp/go-hclog"
 	"github.com/hashicorp/go-plugin"
 	"github.com/zeelink-tech/xlink-plugin-sdk-go/proto"
 	"google.golang.org/grpc"
@@ -62,6 +63,7 @@ type Report interface {
 type BackendConfig struct {
 	DriverName string
 	ReportSvc  Report
+	Logger     hclog.Logger
 }
 
 type Factory func(context.Context, *BackendConfig) (Driver, error)
@@ -69,12 +71,14 @@ type Factory func(context.Context, *BackendConfig) (Driver, error)
 type DriverGRPCPlugin struct {
 	plugin.Plugin
 	Factory Factory
+	Logger  hclog.Logger
 }
 
 func (p *DriverGRPCPlugin) GRPCServer(broker *plugin.GRPCBroker, s *grpc.Server) error {
 	proto.RegisterDriverServer(s, &gRPCServer{
 		broker:  broker,
 		factory: p.Factory,
+		logger:  p.Logger,
 	})
 	return nil
 }
@@ -83,6 +87,7 @@ func (p *DriverGRPCPlugin) GRPCClient(ctx context.Context, broker *plugin.GRPCBr
 	return &gRPCClient{
 		client: proto.NewDriverClient(c),
 		broker: broker,
+		logger: p.Logger,
 	}, nil
 }
 
