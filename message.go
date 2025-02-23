@@ -9,10 +9,8 @@ type Message struct {
 type MessageKind string
 
 const (
-	// MessageReport device report message kind
 	MessageDeviceReport MessageKind = "deviceReport"
-	// MessageReport device lifecycle report message kind
-	MessageDeviceState MessageKind = "deviceState"
+	MessageDeviceState  MessageKind = "deviceState"
 )
 
 type LazyValue struct {
