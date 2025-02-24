@@ -8,11 +8,13 @@ message RequestArgs
 {
   uint32 plugin_id = 1;
   string request  = 2;
+  string request_id = 3;
 }
 
 message ResponseResult
 {
   string data     = 1;
+  string request_id = 2;
 }
 
 service Driver
