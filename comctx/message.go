@@ -1,4 +1,4 @@
-package plugin
+package comctx
 
 import "github.com/satori/go.uuid"
 
@@ -14,8 +14,6 @@ const (
 	MessageDeviceReport MessageKind = "deviceReport"
 	MessageDeviceState  MessageKind = "deviceState"
 )
-
-const KeyDeviceName = "deviceName"
 
 type LazyValue struct {
 	Value interface{}
