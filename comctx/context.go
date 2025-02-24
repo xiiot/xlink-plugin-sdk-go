@@ -7,9 +7,9 @@ import (
 )
 
 type Context struct {
-	RequestID    string
-	CtxStartTime time.Time
-	Logger       *zap.Logger
+	RequestID string
+	StartTime time.Time
+	Logger    *zap.Logger
 }
 
 func NewTraceContext(requestID string, logger *zap.Logger) *Context {
@@ -29,10 +29,10 @@ func (c *Context) SetRequestID(requestID string) {
 
 func (c *Context) SetTraceStartTime() {
 	t := time.Now()
-	c.CtxStartTime = t
+	c.StartTime = t
 	c.Logger = c.Logger.With(zap.Any("startTime", t))
 }
 
 func (c *Context) TraceCostTime(event string) {
-	c.Logger = c.Logger.With(zap.Any(event+" cost time", time.Since(c.CtxStartTime)))
+	c.Logger = c.Logger.With(zap.Any(event+" cost time", time.Since(c.StartTime)))
 }
