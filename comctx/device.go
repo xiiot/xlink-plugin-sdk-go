@@ -1,5 +1,7 @@
 package comctx
 
+import "time"
+
 const KeyDeviceName = "deviceName"
 
 const (
@@ -8,3 +10,8 @@ const (
 	DeviceOffline     = 2
 	DeviceUnknown     = 3
 )
+
+type ReportProperty struct {
+	Time  time.Time `json:"time,omitempty"`
+	Value any       `json:"value,omitempty"`
+}

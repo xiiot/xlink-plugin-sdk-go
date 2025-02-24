@@ -2,8 +2,6 @@ module github.com/zeelink-tech/xlink-plugin-sdk-go
 
 go 1.23.0
 
-toolchain go1.23.1
-
 require (
 	github.com/hashicorp/go-hclog v1.6.3
 	github.com/hashicorp/go-plugin v1.6.3
