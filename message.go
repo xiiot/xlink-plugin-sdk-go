@@ -15,6 +15,8 @@ const (
 	MessageDeviceState  MessageKind = "deviceState"
 )
 
+const KeyDeviceName = "deviceName"
+
 type LazyValue struct {
 	Value interface{}
 	doc   []byte
