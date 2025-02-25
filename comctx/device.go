@@ -3,6 +3,7 @@ package comctx
 import "time"
 
 const KeyDeviceName = "deviceName"
+const KeyGroupName = "groupName"
 
 const (
 	DeviceInactivated = 0
