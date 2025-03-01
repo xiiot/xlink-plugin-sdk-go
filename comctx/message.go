@@ -1,6 +1,9 @@
 package comctx
 
-import "github.com/satori/go.uuid"
+import (
+	"encoding/json"
+	"github.com/satori/go.uuid"
+)
 
 type Message struct {
 	Kind     MessageKind       `yaml:"kind" json:"kind"`
@@ -15,11 +18,25 @@ const (
 	MessageDeviceState  MessageKind = "deviceState"
 )
 
+func NewRequestID() string {
+	return uuid.NewV4().String()
+}
+
 type LazyValue struct {
 	Value interface{}
 	doc   []byte
 }
 
-func NewRequestID() string {
-	return uuid.NewV4().String()
+func (v *LazyValue) Unmarshal(obj interface{}) error {
+	if v.doc != nil {
+		return json.Unmarshal(v.doc, obj)
+	}
+	if v.Value != nil {
+		bs, err := json.Marshal(v.Value)
+		if err != nil {
+			return err
+		}
+		return json.Unmarshal(bs, obj)
+	}
+	return nil
 }
