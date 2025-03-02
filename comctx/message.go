@@ -14,8 +14,10 @@ type Message struct {
 type MessageKind string
 
 const (
-	MessageDeviceReport MessageKind = "deviceReport"
-	MessageDeviceState  MessageKind = "deviceState"
+	MessageDeviceReport      MessageKind = "deviceReport"
+	MessageDeviceState       MessageKind = "deviceState"
+	MessageDevicePropertyGet MessageKind = "devicePropertyGet"
+	MessageDevicePropertySet MessageKind = "devicePropertySet"
 )
 
 func NewRequestID() string {
