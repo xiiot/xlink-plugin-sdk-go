@@ -52,7 +52,7 @@ func (c *Client) Check() error {
 	}
 	c.on = false
 
-	args := []string{}
+	var args []string
 	plugClient := plugin.NewClient(&plugin.ClientConfig{
 		HandshakeConfig: Handshake,
 		Plugins:         PluginMap,
