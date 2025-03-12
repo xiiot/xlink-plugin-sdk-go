@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/hashicorp/go-hclog"
 	"github.com/hashicorp/go-plugin"
-	"github.com/zeelink-tech/xlink-plugin-sdk-go/proto"
+	"github.com/xiiot/xlink-plugin-sdk-go/proto"
 	"google.golang.org/grpc"
 )
 

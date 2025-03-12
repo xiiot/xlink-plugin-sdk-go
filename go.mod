@@ -1,4 +1,4 @@
-module github.com/zeelink-tech/xlink-plugin-sdk-go
+module github.com/xiiot/xlink-plugin-sdk-go
 
 go 1.23.0
 

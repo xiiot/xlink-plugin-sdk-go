@@ -2,7 +2,7 @@ package plugin
 
 import (
 	"context"
-	"github.com/zeelink-tech/xlink-plugin-sdk-go/proto"
+	"github.com/xiiot/xlink-plugin-sdk-go/proto"
 )
 
 var _ Report = &gRPCReportClient{}
