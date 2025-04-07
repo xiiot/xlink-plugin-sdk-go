@@ -22,7 +22,7 @@ const (
 // BitCount 函数根据 ValueType 返回所需的字节数
 func BitCount(val uint8) int {
 	switch val {
-	case VALUE_TYPE_INT16, VALUE_TYPE_UINT16:
+	case VALUE_TYPE_INT16, VALUE_TYPE_UINT16, VALUE_TYPE_BIT:
 		return 1
 	case VALUE_TYPE_INT32, VALUE_TYPE_UINT32, VALUE_TYPE_FLOAT:
 		return 2
