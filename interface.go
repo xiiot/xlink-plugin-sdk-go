@@ -39,6 +39,8 @@ type Driver interface {
 	GetDriverInfo(req *Request) (*Response, error)
 	// SetConfig 配置驱动，目前只配置了驱动的配置文件路径
 	SetConfig(req *Request) (*Response, error)
+	//UpdateConfig 更新驱动配置
+	UpdateConfig(req *Request) (*Response, error)
 	// Setup 宿主进程上报接口传递，必须调用下述逻辑，其余可用户自定义
 	Setup(config *BackendConfig) (*Response, error)
 	// Start 驱动采集启动，用户自定义实现

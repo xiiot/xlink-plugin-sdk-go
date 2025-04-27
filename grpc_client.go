@@ -17,6 +17,18 @@ type gRPCClient struct {
 	logger hclog.Logger
 }
 
+func (c *gRPCClient) UpdateConfig(req *Request) (*Response, error) {
+	res, err := c.client.UpdateConfig(context.Background(), &proto.RequestArgs{
+		Request: req.Req,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return &Response{
+		Data: res.Data,
+	}, nil
+}
+
 func (c *gRPCClient) GetDriverInfo(req *Request) (*Response, error) {
 	res, err := c.client.GetDriverInfo(context.Background(), &proto.RequestArgs{
 		Request: req.Req,

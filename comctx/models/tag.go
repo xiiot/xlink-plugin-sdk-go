@@ -12,6 +12,6 @@ type Tag struct {
 	Type        int64   `json:"type"`
 	Description string  `json:"description"`
 	Value       string  `json:"value"`
-	Node        Node    `gorm:"foreignKey:DriverName;references:Name"`
-	Group       Group   `gorm:"foreignKey:DriverName,GroupName;references:DriverName,Name"`
+	//Node        Node    `gorm:"foreignKey:DriverName;references:Name"`
+	//Group       Group   `gorm:"foreignKey:DriverName,GroupName;references:DriverName,Name"`
 }

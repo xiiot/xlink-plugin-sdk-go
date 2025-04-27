@@ -43,6 +43,17 @@ func (s *gRPCServer) SetConfig(_ context.Context, req *proto.RequestArgs) (*prot
 
 	return &proto.ResponseResult{Data: res.Data}, nil
 }
+
+func (s *gRPCServer) UpdateConfig(_ context.Context, req *proto.RequestArgs) (*proto.ResponseResult, error) {
+	res, err := s.driver.UpdateConfig(&Request{
+		Req: req.Request,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return &proto.ResponseResult{Data: res.Data}, nil
+}
 func (s *gRPCServer) Setup(ctx context.Context, req *proto.RequestArgs) (*proto.ResponseResult, error) {
 	conn, err := grpc.NewClient(
 		fmt.Sprintf("0.0.0.0:%d", req.PluginId),

@@ -21,7 +21,8 @@ service Driver
 {
   rpc GetDriverInfo( RequestArgs ) returns ( ResponseResult );
   rpc SetConfig( RequestArgs ) returns ( ResponseResult );
-
+  rpc UpdateConfig( RequestArgs ) returns ( ResponseResult );
+  
   rpc Setup( RequestArgs ) returns ( ResponseResult );
   rpc Start( RequestArgs ) returns ( ResponseResult );
   rpc Restart( RequestArgs ) returns ( ResponseResult );

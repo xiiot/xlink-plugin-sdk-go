@@ -94,6 +94,13 @@ func (c *Client) SetConfig(req *Request) (*Response, error) {
 	return c.service.SetConfig(req)
 }
 
+func (c *Client) UpdateConfig(req *Request) (*Response, error) {
+	if err := c.Check(); err != nil {
+		return nil, err
+	}
+	return c.service.UpdateConfig(req)
+}
+
 func (c *Client) Setup(config *BackendConfig) (*Response, error) {
 	if err := c.Check(); err != nil {
 		return nil, err
