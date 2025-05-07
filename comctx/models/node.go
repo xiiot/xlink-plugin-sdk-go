@@ -18,9 +18,17 @@ func FindGroupByTag(groups []Group, tag *Tag) *Group {
 	}
 	return nil
 }
+func FindGroupByName(groups []Group, g *Group) *Group {
+	for _, group := range groups {
+		if group.DriverName == g.DriverName && group.Name == g.OldName {
+			return &group
+		}
+	}
+	return nil
+}
 
 func (n *Node) AddTags(tags []*Tag) map[string]*Group {
-	addedGroups := make(map[string]*Group) // ✅ 初始化 map
+	addedGroups := make(map[string]*Group) // 初始化 map
 
 	for _, newTag := range tags {
 		group := FindGroupByTag(n.Groups, newTag)
@@ -28,8 +36,8 @@ func (n *Node) AddTags(tags []*Tag) map[string]*Group {
 			continue // 没找到 group，跳过，或者可以加日志
 		}
 
-		group.Tags = append(group.Tags, *newTag) // ✅ 安全地新增
-
+		group.Tags = append(group.Tags, *newTag) //  安全地新增
+		group.OldName = group.Name
 		addedGroups[group.Name] = group
 	}
 
@@ -56,7 +64,7 @@ func (n *Node) UpdateTags(tags []*Tag) map[string]*Group {
 				break
 			}
 		}
-
+		group.OldName = group.Name
 		// 收集这次有更新的 group
 		updatedGroups[group.Name] = group
 	}
@@ -85,8 +93,35 @@ func (n *Node) RemoveTags(removed []*Tag) map[string]*Group {
 		}
 
 		group.Tags = newTags // 更新 group 的 tags
+		group.OldName = group.Name
 		updatedGroups[group.Name] = group
 	}
 
 	return updatedGroups
+}
+func (n *Node) UpdatedGroups(groups []*Group) map[string]*Group {
+	updatedGroups := make(map[string]*Group) //  初始化 map
+
+	for _, g := range groups {
+		group := FindGroupByName(n.Groups, g)
+		if group != nil {
+			group.Name = g.Name
+			group.OldName = g.OldName
+			group.Interval = g.Interval
+			updatedGroups[g.Name] = group
+		} else {
+			return nil
+		}
+	}
+
+	return updatedGroups
+}
+
+func (n *Node) AddedGroups(groups []*Group) map[string]*Group {
+	addedGroups := make(map[string]*Group)
+	for _, g := range groups {
+		n.Groups = append(n.Groups, *g)
+		addedGroups[g.Name] = g
+	}
+	return addedGroups
 }
