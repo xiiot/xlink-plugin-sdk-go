@@ -213,6 +213,7 @@ func ClosePlugin(name string) error {
 	Lock.Lock()
 	defer Lock.Unlock()
 	if c, ok := Factories[name]; ok {
+		delete(Factories, name)
 		return c.Disable()
 	}
 	return errors.New("plugin not found")

@@ -26,6 +26,14 @@ func FindGroupByName(groups []Group, g *Group) *Group {
 	}
 	return nil
 }
+func FindNodeByName(nodes []Node, name string) *Node {
+	for _, node := range nodes {
+		if node.Name == name {
+			return &node
+		}
+	}
+	return nil
+}
 
 func (n *Node) AddTags(tags []*Tag) map[string]*Group {
 	addedGroups := make(map[string]*Group) // 初始化 map
