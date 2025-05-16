@@ -112,6 +112,10 @@ func (c *Client) Start(req *Request) (*Response, error) {
 	if err := c.Check(); err != nil {
 		return nil, err
 	}
+	c.Lock()
+	c.enable = true
+	c.on = true
+	c.Unlock()
 	return c.service.Start(req)
 }
 
@@ -119,6 +123,10 @@ func (c *Client) Restart(req *Request) (*Response, error) {
 	if err := c.Check(); err != nil {
 		return nil, err
 	}
+	c.Lock()
+	c.enable = true
+	c.on = true
+	c.Unlock()
 	return c.service.Restart(req)
 }
 
@@ -126,6 +134,10 @@ func (c *Client) Stop(req *Request) (*Response, error) {
 	if err := c.Check(); err != nil {
 		return nil, err
 	}
+	c.Lock()
+	c.enable = true
+	c.on = false
+	c.Unlock()
 	return c.service.Stop(req)
 }
 
@@ -168,14 +180,14 @@ func (c *Client) Status() (enable, on bool) {
 	c.Lock()
 	defer c.Unlock()
 
-	if !c.enable {
-		return c.enable, c.on
-	}
-	if c.pluginClient != nil && !c.pluginClient.Exited() {
-		c.on = true
-	} else {
-		c.on = false
-	}
+	//if !c.enable {
+	//	return c.enable, c.on
+	//}
+	//if c.pluginClient != nil && !c.pluginClient.Exited() {
+	//	c.on = true
+	//} else {
+	//	c.on = false
+	//}
 	return c.enable, c.on
 }
 
@@ -207,6 +219,12 @@ func GetPlugin(name string) (*Client, error) {
 		return c, nil
 	}
 	return nil, errors.New("plugin not found")
+}
+
+func GetAllPlugins() map[string]*Client {
+	Lock.Lock()
+	defer Lock.Unlock()
+	return Factories
 }
 
 func ClosePlugin(name string) error {
